@@ -107,7 +107,24 @@ class Directionality extends InheritedWidget {
   /// ```dart
   /// TextDirection textDirection = Directionality.of(context);
   /// ```
+  // TODO(goderbauer): Make this non-null when customers have upgraded to Directionality.maybeOf.
   static TextDirection? of(BuildContext context) {
+    final Directionality? widget = context.dependOnInheritedWidgetOfExactType<Directionality>();
+    return widget?.textDirection;
+  }
+
+  /// The text direction from the closest instance of this class that encloses
+  /// the given context.
+  ///
+  /// If there is no [Directionality] ancestor widget in the tree at the given
+  /// context, then this will return null.
+  ///
+  /// Typical usage is as follows:
+  ///
+  /// ```dart
+  /// TextDirection? textDirection = Directionality.maybeOf(context);
+  /// ```
+  static TextDirection? maybeOf(BuildContext context) {
     final Directionality? widget = context.dependOnInheritedWidgetOfExactType<Directionality>();
     return widget?.textDirection;
   }
@@ -831,7 +848,7 @@ class ClipPath extends SingleChildRenderObjectWidget {
         return ClipPath(
           clipper: ShapeBorderClipper(
             shape: shape,
-            textDirection: Directionality.of(context),
+            textDirection: Directionality.maybeOf(context),
           ),
           clipBehavior: clipBehavior,
           child: child,
@@ -1258,7 +1275,7 @@ class Transform extends SingleChildRenderObjectWidget {
       transform: transform,
       origin: origin,
       alignment: alignment,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
       transformHitTests: transformHitTests,
     );
   }
@@ -1269,7 +1286,7 @@ class Transform extends SingleChildRenderObjectWidget {
       ..transform = transform
       ..origin = origin
       ..alignment = alignment
-      ..textDirection = Directionality.of(context)
+      ..textDirection = Directionality.maybeOf(context)
       ..transformHitTests = transformHitTests;
   }
 }
@@ -1495,7 +1512,7 @@ class FittedBox extends SingleChildRenderObjectWidget {
     return RenderFittedBox(
       fit: fit,
       alignment: alignment,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
       clipBehavior: clipBehavior,
     );
   }
@@ -1505,7 +1522,7 @@ class FittedBox extends SingleChildRenderObjectWidget {
     renderObject
       ..fit = fit
       ..alignment = alignment
-      ..textDirection = Directionality.of(context)
+      ..textDirection = Directionality.maybeOf(context)
       ..clipBehavior = clipBehavior;
   }
 
@@ -1689,7 +1706,7 @@ class Padding extends SingleChildRenderObjectWidget {
   RenderPadding createRenderObject(BuildContext context) {
     return RenderPadding(
       padding: padding,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
     );
   }
 
@@ -1697,7 +1714,7 @@ class Padding extends SingleChildRenderObjectWidget {
   void updateRenderObject(BuildContext context, RenderPadding renderObject) {
     renderObject
       ..padding = padding
-      ..textDirection = Directionality.of(context);
+      ..textDirection = Directionality.maybeOf(context);
   }
 
   @override
@@ -1884,7 +1901,7 @@ class Align extends SingleChildRenderObjectWidget {
       alignment: alignment,
       widthFactor: widthFactor,
       heightFactor: heightFactor,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
     );
   }
 
@@ -1894,7 +1911,7 @@ class Align extends SingleChildRenderObjectWidget {
       ..alignment = alignment
       ..widthFactor = widthFactor
       ..heightFactor = heightFactor
-      ..textDirection = Directionality.of(context);
+      ..textDirection = Directionality.maybeOf(context);
   }
 
   @override
@@ -2171,7 +2188,7 @@ class SizedBox extends SingleChildRenderObjectWidget {
 
   @override
   String toStringShort() {
-    String type;
+    final String type;
     if (width == double.infinity && height == double.infinity) {
       type = '${objectRuntimeType(this, 'SizedBox')}.expand';
     } else if (width == 0.0 && height == 0.0) {
@@ -2185,7 +2202,7 @@ class SizedBox extends SingleChildRenderObjectWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    DiagnosticLevel level;
+    final DiagnosticLevel level;
     if ((width == double.infinity && height == double.infinity) ||
         (width == 0.0 && height == 0.0)) {
       level = DiagnosticLevel.hidden;
@@ -2334,7 +2351,7 @@ class UnconstrainedBox extends SingleChildRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, covariant RenderUnconstrainedBox renderObject) {
     renderObject
-      ..textDirection = textDirection ?? Directionality.of(context)
+      ..textDirection = textDirection ?? Directionality.maybeOf(context)
       ..alignment = alignment
       ..constrainedAxis = constrainedAxis
       ..clipBehavior = clipBehavior;
@@ -2342,7 +2359,7 @@ class UnconstrainedBox extends SingleChildRenderObjectWidget {
 
   @override
   RenderUnconstrainedBox createRenderObject(BuildContext context) => RenderUnconstrainedBox(
-    textDirection: textDirection ?? Directionality.of(context),
+    textDirection: textDirection ?? Directionality.maybeOf(context),
     alignment: alignment,
     constrainedAxis: constrainedAxis,
     clipBehavior: clipBehavior,
@@ -2431,7 +2448,7 @@ class FractionallySizedBox extends SingleChildRenderObjectWidget {
       alignment: alignment,
       widthFactor: widthFactor,
       heightFactor: heightFactor,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
     );
   }
 
@@ -2441,7 +2458,7 @@ class FractionallySizedBox extends SingleChildRenderObjectWidget {
       ..alignment = alignment
       ..widthFactor = widthFactor
       ..heightFactor = heightFactor
-      ..textDirection = Directionality.of(context);
+      ..textDirection = Directionality.maybeOf(context);
   }
 
   @override
@@ -2594,7 +2611,7 @@ class OverflowBox extends SingleChildRenderObjectWidget {
       maxWidth: maxWidth,
       minHeight: minHeight,
       maxHeight: maxHeight,
-      textDirection: Directionality.of(context),
+      textDirection: Directionality.maybeOf(context),
     );
   }
 
@@ -2606,7 +2623,7 @@ class OverflowBox extends SingleChildRenderObjectWidget {
       ..maxWidth = maxWidth
       ..minHeight = minHeight
       ..maxHeight = maxHeight
-      ..textDirection = Directionality.of(context);
+      ..textDirection = Directionality.maybeOf(context);
   }
 
   @override
@@ -3400,7 +3417,7 @@ class Stack extends MultiChildRenderObjectWidget {
     assert(_debugCheckHasDirectionality(context));
     return RenderStack(
       alignment: alignment,
-      textDirection: textDirection ?? Directionality.of(context),
+      textDirection: textDirection ?? Directionality.maybeOf(context),
       fit: fit,
       clipBehavior: overflow == Overflow.visible ? Clip.none : clipBehavior,
     );
@@ -3411,7 +3428,7 @@ class Stack extends MultiChildRenderObjectWidget {
     assert(_debugCheckHasDirectionality(context));
     renderObject
       ..alignment = alignment
-      ..textDirection = textDirection ?? Directionality.of(context)
+      ..textDirection = textDirection ?? Directionality.maybeOf(context)
       ..fit = fit
       ..clipBehavior = overflow == Overflow.visible ? Clip.none : clipBehavior;
   }
@@ -3461,7 +3478,7 @@ class IndexedStack extends Stack {
     return RenderIndexedStack(
       index: index,
       alignment: alignment,
-      textDirection: textDirection ?? Directionality.of(context),
+      textDirection: textDirection ?? Directionality.maybeOf(context),
     );
   }
 
@@ -3471,7 +3488,7 @@ class IndexedStack extends Stack {
     renderObject
       ..index = index
       ..alignment = alignment
-      ..textDirection = textDirection ?? Directionality.of(context);
+      ..textDirection = textDirection ?? Directionality.maybeOf(context);
   }
 }
 
@@ -4084,7 +4101,7 @@ class Flex extends MultiChildRenderObjectWidget {
   /// the logic for providing a text direction only when it is necessary.
   @protected
   TextDirection? getEffectiveTextDirection(BuildContext context) {
-    return textDirection ?? (_needTextDirection ? Directionality.of(context) : null);
+    return textDirection ?? (_needTextDirection ? Directionality.maybeOf(context) : null);
   }
 
   @override
@@ -4954,7 +4971,7 @@ class Wrap extends MultiChildRenderObjectWidget {
       runAlignment: runAlignment,
       runSpacing: runSpacing,
       crossAxisAlignment: crossAxisAlignment,
-      textDirection: textDirection ?? Directionality.of(context),
+      textDirection: textDirection ?? Directionality.maybeOf(context),
       verticalDirection: verticalDirection,
       clipBehavior: clipBehavior,
     );
@@ -4969,7 +4986,7 @@ class Wrap extends MultiChildRenderObjectWidget {
       ..runAlignment = runAlignment
       ..runSpacing = runSpacing
       ..crossAxisAlignment = crossAxisAlignment
-      ..textDirection = textDirection ?? Directionality.of(context)
+      ..textDirection = textDirection ?? Directionality.maybeOf(context)
       ..verticalDirection = verticalDirection
       ..clipBehavior = clipBehavior;
   }
@@ -6879,7 +6896,7 @@ class Semantics extends SingleChildRenderObjectWidget {
     if (!containsText)
       return null;
 
-    return Directionality.of(context);
+    return Directionality.maybeOf(context);
   }
 
   @override
@@ -6959,6 +6976,25 @@ class Semantics extends SingleChildRenderObjectWidget {
 /// had both the label and the checked state. Otherwise, the label
 /// would be presented as a separate feature than the checkbox, and
 /// the user would not be able to be sure that they were related.
+///
+/// {@tool snippet}
+/// This snippet shows how to use [MergeSemantics] to merge the semantics of
+/// a [Checkbox] and [Text] widget.
+///
+/// ```dart
+/// MergeSemantics(
+///   child: Row(
+///     children: <Widget>[
+///       Checkbox(
+///         value: true,
+///         onChanged: (bool value) => null,
+///       ),
+///       const Text("Settings"),
+///     ],
+///   ),
+/// )
+/// ```
+/// {@end-tool}
 ///
 /// Be aware that if two nodes in the subtree have conflicting
 /// semantics, the result may be nonsensical. For example, a subtree
@@ -7155,13 +7191,87 @@ class KeyedSubtree extends StatelessWidget {
   Widget build(BuildContext context) => child;
 }
 
-/// A platonic widget that calls a closure to obtain its child widget.
+/// A stateless utility widget whose [build] method uses its
+/// [builder] callback to create the widget's child.
 ///
 /// {@youtube 560 315 https://www.youtube.com/watch?v=xXNOkIuSYuA}
 ///
+/// This widget is a simple inline alternative to defining a [StatelessWidget]
+/// subclass. For example a widget defined and used like this:
+///
+/// ```dart
+/// class Foo extends StatelessWidget {
+///   @override
+///   Widget build(BuildContext context) => Text('foo');
+/// }
+///
+/// Center(child: Foo())
+/// ```
+///
+/// Could equally well be defined and used like this, without
+/// definining a new widget class:
+///
+/// ```dart
+/// Center(
+///   child: Builder(
+///     builder: (BuildContext context) => Text('foo');
+///   ),
+/// )
+/// ```
+///
+/// The difference between either of the previous examples and simply
+/// creating a child directly, without an intervening widget, is the
+/// extra [BuildContext] element that the additional widget adds. This
+/// is particularly noticeable when the tree contains an inherited
+/// widget that is referred to by a method like [Scaffold.of],
+/// which visits the child widget's BuildContext ancestors.
+///
+/// In the following example the button's `onPressed` callback is unable
+/// to find the enclosing [ScaffoldState] with [Scaffold.of]:
+///
+/// ```dart
+/// Widget build(BuildContext context) {
+///   return Scaffold(
+///     body: Center(
+///       child: TextButton(
+///         onPressed: () {
+///           // Fails because Scaffold.of() doesn't find anything
+///           // above this widget's context.
+///           print(Scaffold.of(context).hasAppBar);
+///         },
+///         child: Text('hasAppBar'),
+///       )
+///     ),
+///   );
+/// }
+/// ```
+///
+/// A [Builder] widget introduces an additional [BuildContext] element
+/// and so the [Scaffold.of] method succeeds.
+///
+/// ```dart
+/// Widget build(BuildContext context) {
+///   return Scaffold(
+///     body: Builder(
+///       builder: (BuildContext context) {
+///         return Center(
+///           child: TextButton(
+///             onPressed: () {
+///               print(Scaffold.of(context).hasAppBar);
+///             },
+///             child: Text('hasAppBar'),
+///           ),
+///         );
+///       },
+///     ),
+///   );
+/// }
+/// ```
+///
 /// See also:
 ///
-///  * [StatefulBuilder], a platonic widget which also has state.
+///  * [StatefulBuilder], A stateful utility widget whose [build] method uses its
+///    [builder] callback to create the widget's child.
 class Builder extends StatelessWidget {
   /// Creates a widget that delegates its build to a callback.
   ///
